@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="904.0" prefWidth="914.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="spellbook.FXMLDocumentController">
+   <children>
+      <TabPane prefHeight="935.0" prefWidth="588.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Spell List">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="870.0" prefWidth="475.0">
+                     <children>
+                        <ListView fx:id="spellList" onMouseClicked="#selectListSpell" prefHeight="811.0" prefWidth="588.0" />
+                        <TextField fx:id="tagSearch" layoutY="817.0" prefHeight="31.0" prefWidth="160.0" promptText="enter tags" />
+                        <Button layoutX="169.0" layoutY="817.0" mnemonicParsing="false" onAction="#searchTag" text="Search By Tag" />
+                        <TextField fx:id="levelSearch" layoutX="505.0" layoutY="817.0" prefHeight="31.0" prefWidth="76.0" />
+                        <Button layoutX="387.0" layoutY="817.0" mnemonicParsing="false" onAction="#limitLevel" text="Limit By Level" />
+                        <Button layoutX="286.0" layoutY="817.0" mnemonicParsing="false" onAction="#clearLimits" text="Clear Limits" />
+                        <Label layoutX="441.0" layoutY="854.0" text="Saves to:" />
+                        <Label layoutX="356.0" layoutY="872.0" text="C:\Program Files\Yawrf\Spellbook\" />
+                        <Button layoutX="169.0" layoutY="857.0" mnemonicParsing="false" onAction="#searchName" text="Search By Name" />
+                        <TextField fx:id="nameSearch" layoutY="857.0" prefHeight="31.0" prefWidth="160.0" promptText="enter name" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Spell Books">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ComboBox fx:id="bookPicker" editable="true" layoutX="14.0" layoutY="26.0" onShown="#updateBookList" prefHeight="31.0" prefWidth="241.0" promptText="Spellbook Name" />
+                        <Button layoutX="268.0" layoutY="26.0" mnemonicParsing="false" onAction="#saveBook" text="Save Book" />
+                        <Button layoutX="466.0" layoutY="26.0" mnemonicParsing="false" onAction="#deleteBook" text="Delete Book" />
+                        <ListView fx:id="spellBook" layoutX="14.0" layoutY="64.0" onMouseClicked="#selectBookSpell" prefHeight="787.0" prefWidth="554.0" />
+                        <Button layoutX="364.0" layoutY="26.0" mnemonicParsing="false" onAction="#loadBook" text="Load Book" />
+                        <Button layoutX="179.0" layoutY="858.0" mnemonicParsing="false" onAction="#clearBook" text="Clear List (Will Not Clear Saved Book)" />
+                        <Label layoutX="239.0" layoutY="4.0" text="Loading or Deleting a book will clear the current list" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <Label layoutX="648.0" layoutY="45.0" text="Name" textAlignment="RIGHT" />
+      <TextField fx:id="nameField" layoutX="699.0" layoutY="40.0" />
+      <TextField fx:id="schoolField" layoutX="699.0" layoutY="78.0" />
+      <Label layoutX="643.0" layoutY="82.0" text="School" textAlignment="RIGHT" />
+      <TextField fx:id="levelField" layoutX="699.0" layoutY="117.0" />
+      <Label layoutX="654.0" layoutY="122.0" text="Level" textAlignment="RIGHT" />
+      <TextField fx:id="ritualField" layoutX="699.0" layoutY="154.0" />
+      <Label layoutX="648.0" layoutY="159.0" text="Ritual" textAlignment="RIGHT" />
+      <Label layoutX="600.0" layoutY="196.0" text="Casting Time" textAlignment="RIGHT" />
+      <TextField fx:id="castingTimeField" layoutX="699.0" layoutY="191.0" />
+      <TextField fx:id="rangeField" layoutX="699.0" layoutY="229.0" />
+      <Label layoutX="648.0" layoutY="234.0" text="Range" textAlignment="RIGHT" />
+      <Label layoutX="606.0" layoutY="273.0" text="Components" textAlignment="RIGHT" />
+      <TextField fx:id="componentsField" layoutX="699.0" layoutY="268.0" />
+      <TextField fx:id="durationField" layoutX="699.0" layoutY="306.0" />
+      <Label layoutX="632.0" layoutY="311.0" text="Duration" textAlignment="RIGHT" />
+      <Label layoutX="616.0" layoutY="350.0" text="Description" textAlignment="RIGHT" />
+      <Label layoutX="653.0" layoutY="593.0" text="Effect" textAlignment="RIGHT" />
+      <Label layoutX="643.0" layoutY="677.0" text="Upcast" textAlignment="RIGHT" />
+      <Label layoutX="656.0" layoutY="774.0" text="Tags" textAlignment="RIGHT" />
+      <TextArea fx:id="descriptionArea" layoutX="699.0" layoutY="350.0" prefHeight="228.0" prefWidth="187.0" wrapText="true" />
+      <TextArea fx:id="effectArea" layoutX="699.0" layoutY="588.0" prefHeight="75.0" prefWidth="187.0" wrapText="true" />
+      <TextArea fx:id="upcastArea" layoutX="699.0" layoutY="672.0" prefHeight="86.0" prefWidth="187.0" wrapText="true" />
+      <TextArea fx:id="tagsArea" layoutX="699.0" layoutY="769.0" prefHeight="118.0" prefWidth="187.0" wrapText="true" />
+      <Button layoutX="759.0" layoutY="2.0" mnemonicParsing="false" onAction="#saveSpell" text="Save/Clear Spell" />
+      <Button layoutX="787.0" layoutY="897.0" mnemonicParsing="false" onAction="#deleteSpell" text="Delete Spell" />
+      <Button layoutX="600.0" layoutY="3.0" mnemonicParsing="false" onAction="#addToBook" text="Add to Active Spellbook">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <Button layoutX="591.0" layoutY="898.0" mnemonicParsing="false" onAction="#removeFromBook" text="Remove from Active Spellbook">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <Label layoutX="591.0" layoutY="814.0" text="Label" />
+   </children>
+</AnchorPane>
