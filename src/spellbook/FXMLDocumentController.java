@@ -58,33 +58,36 @@ public class FXMLDocumentController implements Initializable {
   //~~~~~~~~General~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     public void saveSpell() {
-        
-        int level = 0;
-        try {
-            level = Integer.parseInt(levelField.getText());
-        } catch(Exception e) {}
-        boolean ritual = Boolean.getBoolean(ritualField.getText());
-        ArrayList<String> tags = new ArrayList<>();
-        
-        char[] tagChars = tagsArea.getText().toCharArray();
-        String temp = "";
-        for(int i = 0; i < tagChars.length; ++i) {
-            if(tagChars[i] != ',') {
-                temp += tagChars[i];
-            } else {
-                tags.add(temp.toLowerCase());
-                temp = "";
+        if(!nameField.getText().equals("")) {
+            int level = 0;
+            try {
+                level = Integer.parseInt(levelField.getText());
+            } catch(Exception e) {}
+
+            boolean ritual = ritualField.getText().toLowerCase().equals("true") || ritualField.getText().equals("1");
+
+            ArrayList<String> tags = new ArrayList<>();
+
+            char[] tagChars = tagsArea.getText().toCharArray();
+            String temp = "";
+            for(int i = 0; i < tagChars.length; ++i) {
+                if(tagChars[i] != ',') {
+                    temp += tagChars[i];
+                } else {
+                    tags.add(temp.toLowerCase());
+                    temp = "";
+                }
             }
+            tags.add(temp);
+
+            Spell newSpell = new Spell(nameField.getText(), schoolField.getText(), level,ritual, 
+                    castingTimeField.getText(), rangeField.getText(), componentsField.getText(), 
+                    durationField.getText(), descriptionArea.getText(), effectArea.getText(), upcastArea.getText(), tags.toArray(new String[0]));
+
+            ioSpells.writeObject(newSpell, nameField.getText());
+            clearSpell();
+            resetSpellList();
         }
-        tags.add(temp);
-        
-        Spell newSpell = new Spell(nameField.getText(), schoolField.getText(), level,ritual, 
-                castingTimeField.getText(), rangeField.getText(), componentsField.getText(), 
-                durationField.getText(), descriptionArea.getText(), effectArea.getText(), upcastArea.getText(), tags.toArray(new String[0]));
-        
-        ioSpells.writeObject(newSpell, nameField.getText());
-        clearSpell();
-        resetSpellList();
     }
     
     public void deleteSpell() {
@@ -143,14 +146,10 @@ public class FXMLDocumentController implements Initializable {
     public void resetSpellList() {
         ObservableList<String> noList = FXCollections.observableArrayList(new ArrayList<>());
         spellList.setItems(noList);
-        ObservableList<String> spellsList = FXCollections.observableArrayList(ioSpells.listFiles());
-        spellList.setItems(spellsList);
-    }
-    
-    public void resetSpellList(ArrayList<String> list) {
-        ObservableList<String> noList = FXCollections.observableArrayList(new ArrayList<>());
-        spellList.setItems(noList);
-        ObservableList<String> spellsList = FXCollections.observableArrayList(list);
+        if(!narrowed) {
+            narrowList = ioSpells.listFiles();
+        }
+        ObservableList<String> spellsList = FXCollections.observableArrayList(narrowList);
         spellList.setItems(spellsList);
     }
     
@@ -162,6 +161,8 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
+    private ArrayList<String> narrowList = new ArrayList<>();
+    private boolean narrowed = false;
     private ArrayList<String> searchTags = new ArrayList<>();
     private Integer searchLevel = null;
     private String searchName = null;
@@ -212,6 +213,7 @@ public class FXMLDocumentController implements Initializable {
         tagSearch.setText((""));
         levelSearch.setText("");
         nameSearch.setText("");
+        narrowed = false;
         resetSpellList();
     }
     
@@ -246,7 +248,8 @@ public class FXMLDocumentController implements Initializable {
                     }
                 }
             }
-            resetSpellList(spells);
+            narrowList = spells;
+            narrowed = true;
         } else if(searchTags.size() > 0) {
             for(String s : ioSpells.listFiles()) {
                 Spell spell = (Spell)ioSpells.readObject(s);
@@ -267,17 +270,21 @@ public class FXMLDocumentController implements Initializable {
                     }
                 }
             }
-            resetSpellList(spells);
+            narrowList = spells;
+            narrowed = true;
         } else if(searchName != null) {
             for(String s : ioSpells.listFiles()) {
                 if(s.toLowerCase().contains(searchName)) {
                     spells.add(s);
                 }
             }
-            resetSpellList(spells);
+            narrowList = spells;
+            narrowed = true;
         } else {
-            resetSpellList();
+            narrowList = new ArrayList<>();
+            narrowed = false;
         }
+        resetSpellList();
     }
     
   //~~~~~~~~Spell Book~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
